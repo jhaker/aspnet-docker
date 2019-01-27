@@ -13,16 +13,3 @@ RUN Start-Process "$env:TEMP\vc2013x86.exe" '/features + /q' -wait
 # Download C++ 2015 Redistributable Package (x86)
 RUN Invoke-WebRequest https://download.microsoft.com/download/6/A/A/6AA4EDFF-645B-48C5-81CC-ED5963AEAD48/vc_redist.x86.exe  -OutFile "$env:TEMP\vc2015x86.exe" -UseBasicParsing  
 RUN Start-Process "$env:TEMP\vc2015x86.exe" '/features + /q' -wait
-
-# Install iis manager
-RUN wget https://download.microsoft.com/download/1/2/8/128E2E22-C1B9-44A4-BE2A-5859ED1D4592/rewrite_amd64_en-US.msi -OutFile rewrite_amd64_en-US.msi; msiexec /i "rewrite_amd64_en-US.msi" /q /log foo.log; \
-	Import-Module -Name WebAdministration; \
-	Import-Module -Name IISAdministration; \
-	Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force; \
-	Install-Module -Name IISAdministration -Force; \
-	Install-Module -Name IISAdministration -RequiredVersion 1.1.0.0 -Force;  \
-	Remove-Module IISAdministration; \
-	Get-IISServerManager;
-
-# Remove default web site
-RUN Remove-Website 'Default Web Site'; 
